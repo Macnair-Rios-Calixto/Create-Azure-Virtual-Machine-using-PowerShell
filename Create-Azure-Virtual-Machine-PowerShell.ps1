@@ -3,7 +3,7 @@
 
 # Variables for common values
 $location = "eastus2"
-$resourceGroup = "RG-DEV3"
+$resourceGroup = "RG-DEV"
 $vmName = "VM-01"
 $publicIP = "pip-1"
 $subnet = "subnet-1"
