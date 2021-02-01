@@ -81,7 +81,7 @@ $nic = New-AzureRmNetworkInterface `
     -NetworkSecurityGroupId $nsg.Id
 
 # Create a virtual machine configuration
-$vmConfig = New-AzureRmVMConfig -VMName $vmName -VMSize Standard_B1s | `
+$vmConfig = New-AzureRmVMConfig -VMName $vmName -VMSize Standard_B2s | `
 Set-AzureRmVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred | `
 Set-AzureRmVMSourceImage -PublisherName MicrosoftWindowsServer `
     -Offer WindowsServer -Skus 2019-Datacenter -Version latest | `
