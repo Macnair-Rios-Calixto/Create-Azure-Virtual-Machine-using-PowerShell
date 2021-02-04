@@ -10,7 +10,6 @@ $subnet = "subnet-1"
 $vnet = "vnet-1"
 $nsg = "nsg-1"
 $nsgrdp = "nsgrdp"
-$nsgwww = "nsgwww"
 $nic = "nic-1"
 
 # Create resource group
@@ -19,11 +18,6 @@ New-AzureRmResourceGroup -ResourceGroupName $resourceGroup -Location $location
 # Get vm credentials
 $cred = Get-Credential
 
-# Create a subnet configuration
-$subnetConfig = New-AzureRmVirtualNetworkSubnetConfig `
-    -Name $subnet `
-    -AddressPrefix 192.168.1.0/24
-
 # Create a virtual network
 $vnet = New-AzureRmVirtualNetwork `
     -ResourceGroupName $resourceGroup `
@@ -31,6 +25,11 @@ $vnet = New-AzureRmVirtualNetwork `
     -Name $vnet `
     -AddressPrefix 192.168.0.0/16 `
     -Subnet $subnetConfig
+
+# Create a subnet configuration
+$subnetConfig = New-AzureRmVirtualNetworkSubnetConfig `
+    -Name $subnet `
+    -AddressPrefix 192.168.1.0/24
 
 # Create a public IP address and specify a DNS name
 $publicIP = New-AzureRmPublicIpAddress `
@@ -52,24 +51,12 @@ $nsgRuleRDP = New-AzureRmNetworkSecurityRuleConfig `
     -DestinationPortRange 3389 `
     -Access Allow
 
-# Create an inbound network security group rule for port 80
-$nsgRuleWeb = New-AzureRmNetworkSecurityRuleConfig `
-    -Name $nsgwww `
-    -Protocol Tcp `
-    -Direction Inbound `
-    -Priority 1001 `
-    -SourceAddressPrefix * `
-    -SourcePortRange * `
-    -DestinationAddressPrefix * `
-    -DestinationPortRange 80 `
-    -Access Allow
-
 # Create a network security group
 $nsg = New-AzureRmNetworkSecurityGroup `
     -ResourceGroupName $resourceGroup `
     -Location $location `
     -Name $nsg `
-    -SecurityRules $nsgRuleRDP,$nsgRuleWeb
+    -SecurityRules $nsgRuleRDP
 
 # Create a virtual network card and associate with public IP address and NSG
 $nic = New-AzureRmNetworkInterface `
